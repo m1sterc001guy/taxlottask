@@ -51,8 +51,8 @@ For `sell`, if the selection algorithm was `fifo`, then time complexity is O(1) 
 Instead, I elected to store the tax lots in a sorted queue based on the selection algorithm. For `fifo`, the tax lots are stored sorted by their date. For `hifo`, the tax lots are stored sorted by their price. This makes each `buy` operation O(N) for `hifo`, since we need to search the whole list to figure out if we need to make a new tax lot. For `fifo`, this can be optimized to O(1) (assuming tax lot operations are processed in ascending order) since the list is stored sorted by the date. Each
 `sell` operation is now worst case time complexity O(N) to sell all the tax lots, since we just need to pop all the elements of the queue in order.
 
-Given that there is only a single tax lot per day, optimizing for `sell` seemed like the smart choice since it made that operation much more efficient, while only requiring O(N) time complexity for `buy`, which isn't that bad considering the lot collection
-structure shouldn't have too many items in it (unless it is processing data for decades).
+Given that there is only a single tax lot per day (because we merge all lot operations on the same day), optimizing for `sell` seemed like the smart choice since it made that operation much more efficient, while only requiring O(N) worst case time complexity for `buy`, which isn't that bad considering the lot collection
+structure shouldn't have too many items in it (unless it is processing data for decades). Our space complexity is always O(N), where N is the total number of tax lots.
 
 
 ## Production Improvements
