@@ -7,4 +7,4 @@ edition = "2021"
 clap = { version = "4.1.6", features = ["derive", "std", "help", "usage", "error-context", "suggestions", "env"], default-features = false }
 chrono = "0.4"
 thiserror = "1.0.39"
-rusty-money = "0.4.1"
+rust_decimal = "1.10"
