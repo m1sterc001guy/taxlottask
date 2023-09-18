@@ -45,11 +45,11 @@ This application supports two main operations: `buy` and `sell`. Buy must suppor
 Sell must support efficient traversal through the lot collection according to the tax lot selection algorithm. 
 When thinking about data structures to use to support these operations, it appeared that there was a tradeoff: optimize for `buy` or `sell`.
 
-For example, it is possible to store the tax lots in a vector that is sorted order according to their date. This would make `buy` time complexity O(1) for average and worse case (assuming tax lot operations are processed in ascending order). 
-For `sell`, if the selection algorithm was `fifo`, then time complexity is O(1) to get the "next" item and O(N) to sell all lots. However, if the selection algorithm was `hifo`, then to `sell` all lots, it would be O(N^2) since it is possible the lot collection needs to be traversed N times to find the "next" tax lot because the lots are not stored in order of price.
+For example, it is possible to store the tax lots in a vector that is sorted order according to their date. This would make `buy` time complexity O(1) for average and worst case (assuming tax lot operations are processed in ascending order). 
+For `sell`, if the selection algorithm was `fifo`, then time complexity is O(1) to get the "next" item and O(N) to sell all lots. However, if the selection algorithm was `hifo`, then to `sell` all lots, the worst case time complexity would be O(N^2) since it is possible the lot collection needs to be traversed N times to find the "next" tax lot because the lots are not stored in order of price.
 
 Instead, I elected to store the tax lots in a sorted queue based on the selection algorithm. For `fifo`, the tax lots are stored sorted by their date. For `hifo`, the tax lots are stored sorted by their price. This makes each `buy` operation O(N) for `hifo`, since we need to search the whole list to figure out if we need to make a new tax lot. For `fifo`, this can be optimized to O(1) (assuming tax lot operations are processed in ascending order) since the list is stored sorted by the date. Each
-`sell` operation is now worst case time complexity O(N) to sell all the tax lots, since we just need to pop all the elements of the queue in order.
+`sell` operation is now worst case time complexity O(N) to sell all the tax lots (regardless of the selection algorithm), since we just need to pop all the elements of the queue in order.
 
 Given that there is only a single tax lot per day (because we merge all lot operations on the same day), optimizing for `sell` seemed like the smart choice since it made that operation much more efficient, while only requiring O(N) worst case time complexity for `buy`, which isn't that bad considering the lot collection
 structure shouldn't have too many items in it (unless it is processing data for decades). Our space complexity is always O(N), where N is the total number of tax lots.
